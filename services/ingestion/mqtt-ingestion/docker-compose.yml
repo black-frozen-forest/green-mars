@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  mqtt-broker:
+    image: eclipse-mosquitto:2.0
+    container_name: mqtt-broker
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+  mqtt-ingestion:
+    build: .
+    container_name: mqtt-ingestion
+    depends_on:
+      - mqtt-broker
+    environment:
+      - MQTT_BROKER_URL=tcp://mqtt-broker:1883
+      - MQTT_CLIENT_ID=mqtt-ingestion-client
+      - MQTT_TOPIC=detections
+    ports:
+      - "8082:8082"

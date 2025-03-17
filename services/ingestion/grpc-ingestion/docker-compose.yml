@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  grpc-ingestion:
+    build: .
+    container_name: grpc-ingestion
+    environment:
+      - GRPC_SERVER_PORT=9090
+      - AI_CONDO_KAFKA_BOOTSTRAP_SERVERS=localhost:9092
+      - AI_CONDO_KAFKA_TOPIC=detections
+    ports:
+      - "9090:9090"
+    depends_on:
+      - kafka
